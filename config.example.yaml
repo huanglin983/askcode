@@ -1,0 +1,12 @@
+readme_dir: "E:/支架项目/readme"   # 知识库在支架项目；本仓只放应用代码
+server:
+  host: 127.0.0.1
+  port: 8765
+llm:
+  # 通义千问 DashScope OpenAI 兼容模式
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  api_key: "YOUR_DASHSCOPE_API_KEY"
+  model: qwen-plus          # 可改为 qwen-turbo / qwen-max 等
+  timeout_sec: 120
+retrieval:
+  top_k: 8

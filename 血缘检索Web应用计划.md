@@ -2,7 +2,7 @@
 
 > 用途：新开 Agent/窗口按本文落地实现。  
 > 最后更新：2026-09-24  
-> 状态：已实现（代码位于 `E:\支架项目\apps\lineage-qa/`；知识库 `readme/`、业务代码 `src/`）
+> 状态：已实现（应用代码：`E:\askcode\apps\lineage-qa/`；知识库：`E:\支架项目\readme`；业务 SQL：`E:\支架项目\src`）
 
 ---
 
@@ -26,7 +26,7 @@
 |----|------|
 | 部署 | 本机独立启动（uvicorn），**不接** Dify / ChatBI / 天玑 |
 | 大模型 | 通义千问 · DashScope **OpenAI 兼容** HTTP 接口 |
-| 密钥与地址 | 配置文件 `apps/lineage-qa/config.yaml` |
+| 密钥与地址 | 配置文件 `lineage-qa/config.yaml` |
 | 样例配置 | 提交 `config.example.yaml`；真实 `config.yaml` 必须 **gitignore** |
 | 完整文档 | 精确命中表/字段时可点开整份 README（非仅检索 chunk） |
 | 检索 | v1 用 BM25/关键词，**不上**向量库 |
@@ -51,7 +51,7 @@ flowchart LR
 
 | 层 | 实现 |
 |----|------|
-| 目录 | `apps/lineage-qa/`（与 `src/`、`readme/` 并列） |
+| 目录 | 本仓 `lineage-qa/`；知识库/SQL 仍在支架项目 `readme/`、`src/` |
 | 后端 | FastAPI + 静态托管前端 |
 | 前端 | 单页 H5：三幕式答案 + 来源列表 + 完整文档抽屉 |
 | 知识库 | 扫描 `readme/**/*.md`，按二级标题 `##` 切块；保留 `file → 全文` 映射 |
@@ -62,7 +62,7 @@ flowchart LR
 ## 4. 建议目录结构
 
 ```text
-apps/lineage-qa/
+lineage-qa/
   README.md                 # 启动与配置说明
   requirements.txt
   config.example.yaml
@@ -84,16 +84,16 @@ apps/lineage-qa/
     schemas.py              # 请求/响应模型
 ```
 
-仓库根 `.gitignore` 或本目录 `.gitignore` 增加：`apps/lineage-qa/config.yaml`。
+仓库根 `.gitignore` 或本目录 `.gitignore` 增加：`lineage-qa/config.yaml`。
 
 ---
 
 ## 5. 配置文件约定
 
-`apps/lineage-qa/config.example.yaml`：
+`lineage-qa/config.example.yaml`：
 
 ```yaml
-readme_dir: ../../readme   # 相对 apps/lineage-qa
+readme_dir: ../../readme   # 相对 lineage-qa
 server:
   host: 127.0.0.1
   port: 8765
@@ -238,18 +238,18 @@ retrieval:
 
 按顺序完成：
 
-1. [ ] 新建 `apps/lineage-qa/` 骨架：FastAPI、requirements、`config.example.yaml`、gitignore
+1. [ ] 新建 `lineage-qa/` 骨架：FastAPI、requirements、`config.example.yaml`、gitignore
 2. [ ] 实现 `readme/` 按 `##` 切块索引（启动加载 + `/api/reindex`），保留整文件路径映射
 3. [ ] BM25 检索 + `/api/chat`（sources + matched_docs）+ 千问调用
 4. [ ] `GET /api/doc` 安全读全文
 5. [ ] `prompts/system.md` + 前端三幕式渲染与来源列表
 6. [ ] 精确命中时「查看完整 README」抽屉（可锚到 `##`）
-7. [ ] `apps/lineage-qa/README.md`：复制配置、填 AK、启动命令、刷新索引、文档查看说明
+7. [ ] `lineage-qa/README.md`：复制配置、填 AK、启动命令、刷新索引、文档查看说明
 
 建议启动命令（写入 README）：
 
 ```bash
-cd apps/lineage-qa
+cd E:\askcode\apps\lineage-qa
 copy config.example.yaml config.yaml   # Windows；填入真实 api_key
 pip install -r requirements.txt
 uvicorn app.main:app --host 127.0.0.1 --port 8765
@@ -283,10 +283,10 @@ uvicorn app.main:app --host 127.0.0.1 --port 8765
 
 | 路径 | 作用 |
 |------|------|
-| [readme/](../readme/) | 知识库语料 |
-| [.cursor/skills/sql-table-rag-metadata/SKILL.md](../.cursor/skills/sql-table-rag-metadata/SKILL.md) | `##` 切块与血缘文档规范 |
-| [readme/RAG_ads_fin_tracker_comparison_summary_df.md](../readme/RAG_ads_fin_tracker_comparison_summary_df.md) | RAG 文档样例 |
-| [doc/指标语义分析平台四系统架构设计完整文档.md](指标语义分析平台四系统架构设计完整文档.md) | 四系统架构（本应用 v1 **不接入**） |
+| `E:\askcode\apps\lineage-qa\` | 本应用代码（本仓） |
+| `E:\支架项目\readme\` | 知识库语料（只读） |
+| `E:\支架项目\src\` | 业务 SQL（README 引用，本应用不直读） |
+| `E:\支架项目\.cursor\skills\sql-table-rag-metadata\SKILL.md` | `##` 切块与血缘文档规范 |
 
 ---
 
@@ -294,4 +294,4 @@ uvicorn app.main:app --host 127.0.0.1 --port 8765
 
 可直接对 Agent 说：
 
-> 请严格按 [doc/血缘检索Web应用计划.md](血缘检索Web应用计划.md) 实现 `apps/lineage-qa/` 网页应用，不要做 Cursor Skill，不要接 Dify。完成后按 §12 自检。
+> 请严格按 [doc/血缘检索Web应用计划.md](血缘检索Web应用计划.md) 实现 `lineage-qa/` 网页应用，不要做 Cursor Skill，不要接 Dify。完成后按 §12 自检。

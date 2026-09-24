@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>数据血缘 README 检索</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="activity" aria-label="主导航">
+      <div class="activity-brand" title="数据血缘 README 检索">A</div>
+      <button type="button" class="act-btn active" data-view="qa" id="navQa" title="问答">
+        <span class="act-icon" aria-hidden="true">◇</span>
+        <span class="act-label">问答</span>
+      </button>
+      <button type="button" class="act-btn" data-view="kb" id="navKb" title="知识库">
+        <span class="act-icon" aria-hidden="true">☰</span>
+        <span class="act-label">知识库</span>
+      </button>
+    </aside>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">
+        <div class="sidebar-title">数据血缘</div>
+        <div class="sidebar-sub">README 检索</div>
+      </div>
+
+      <div id="sidebarQa" class="sidebar-pane">
+        <div class="sidebar-section-head">
+          <span>最近查询</span>
+          <button type="button" id="btnClearHistory" class="ghost small">清空</button>
+        </div>
+        <ul id="historyList" class="history-list"></ul>
+        <p id="historyEmpty" class="history-empty">暂无查询记录</p>
+      </div>
+
+      <div id="sidebarKb" class="sidebar-pane hidden">
+        <div class="sidebar-section-head">
+          <span>知识库</span>
+          <span id="kbCount" class="kb-count"></span>
+        </div>
+        <div class="sidebar-search">
+          <input id="kbSearch" type="search" placeholder="搜索表名 / 文件…" autocomplete="off" />
+        </div>
+        <ul id="kbList" class="kb-list"></ul>
+        <p id="kbEmpty" class="kb-empty hidden">无匹配文档</p>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="titlebar">
+        <div class="titlebar-tabs" id="editorTabs" role="tablist"></div>
+        <div class="titlebar-actions">
+          <button type="button" id="btnCloseAllTabs" class="ghost small hidden" title="关闭全部文档标签">关闭全部</button>
+          <button id="btnReindex" type="button" class="ghost small" title="重扫 readme/">刷新索引</button>
+          <span id="status" class="status"></span>
+        </div>
+      </header>
+
+      <main class="main">
+        <div id="viewQa" class="view">
+          <section class="ask">
+            <textarea id="query" rows="3" placeholder="例如：ads_fin_tracker_comparison_summary_df 的上游是什么？project_number 字段从哪来？"></textarea>
+            <div class="ask-actions">
+              <span class="ask-hint">Ctrl + Enter 发送</span>
+              <button id="btnSend" type="button">发送</button>
+            </div>
+          </section>
+
+          <section id="answerPanel" class="answer hidden">
+            <div id="answerBody" class="answer-body"></div>
+            <div id="matchedDocs" class="matched"></div>
+            <div id="sources" class="sources"></div>
+          </section>
+
+          <section id="emptyQa" class="empty-state">
+            <div class="empty-title">向知识库提问</div>
+            <p class="empty-desc">查表、字段或业务名词。答案仅来自本地 README，不编造血缘。</p>
+          </section>
+        </div>
+
+        <div id="viewKb" class="view hidden">
+          <section class="kb-hint">
+            <div class="empty-title">浏览知识库</div>
+            <p class="empty-desc">在左侧列表选择文档，将在右侧以标签页打开完整 README。</p>
+          </section>
+        </div>
+
+        <div id="viewEditor" class="view editor-view hidden">
+          <div class="editor-meta">
+            <div id="editorTitle" class="editor-title"></div>
+            <div id="editorPath" class="editor-path"></div>
+          </div>
+          <div id="editorBody" class="editor-body markdown-body"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
